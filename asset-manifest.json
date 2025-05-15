@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/papigon-website/static/css/main.03999ac2.css",
+    "main.js": "/papigon-website/static/js/main.d7056a11.js",
+    "static/js/453.865eaf71.chunk.js": "/papigon-website/static/js/453.865eaf71.chunk.js",
+    "index.html": "/papigon-website/index.html",
+    "main.03999ac2.css.map": "/papigon-website/static/css/main.03999ac2.css.map",
+    "main.d7056a11.js.map": "/papigon-website/static/js/main.d7056a11.js.map",
+    "453.865eaf71.chunk.js.map": "/papigon-website/static/js/453.865eaf71.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.03999ac2.css",
+    "static/js/main.d7056a11.js"
+  ]
+}
