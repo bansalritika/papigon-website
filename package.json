@@ -1,0 +1,18 @@
+{
+  "name": "papigon-website",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+  "server": "cd backend && node server.js",
+  "client": "cd papigon && npm start"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}
