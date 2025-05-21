@@ -19,26 +19,20 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const { email, password } = form;
-      const response = await axios.post(`${API_BASE_URL}/api/auth/login`, { email, password });
-
-      console.log('Login response:', response.data);
-
-      if (response.data && response.data.token) {
-        alert('Login Successful');
-
-        // login function me backend se aaya hua user data pass karo
-        login({
-          token: response.data.token,
-          userId: response.data.userId
-        });
-
-        // Navigate user to dashboard or profile page
-        navigate('/profile');
-      } else {
-        alert('Login failed: Invalid response from server');
-      }
-    } catch (err) {
+  const response = await axios.post(`${API_BASE_URL}/api/auth/login`, { email, password });
+  console.log('Login response:', response.data);
+  if (response.data && response.data.token) {
+    alert('Login Successful');
+    login({ token: response.data.token, userId: response.data.userId });
+    navigate('/profile');
+  } else {
+    alert('Login failed: Invalid response from server');
+  }
+} catch (err) {
+  console.error('Login error:', err);
+  alert(err.response?.data?.message || 'Login failed');
+}
+catch (err) {
       alert(err.response?.data?.message || 'Login failed');
     }
   };

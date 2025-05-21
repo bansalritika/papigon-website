@@ -8,7 +8,11 @@ const cors = require('cors');
 
 const app = express();
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+  origin: 'https://papigon-website.vercel.app', // your frontend URL
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], // allowed HTTP methods
+  credentials: true, // if your frontend uses credentials like cookies or auth headers
+}));
 
 // API Routes
 app.use('/api/auth', authRoutes);
