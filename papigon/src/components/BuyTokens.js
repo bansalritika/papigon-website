@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { API_BASE_URL } from '../config';
 import { useLocation, Link } from 'react-router-dom';
 import Lottie from 'lottie-react';
 import checkAnimation from './assets/check-animation.json'; // Checkmark animation JSON
@@ -65,7 +66,7 @@ const BuyTokens = () => {
         transactionHash: '', // add actual transaction hash for USDT payments if any
       };
 
-      const response = await axios.post('http://localhost:5000/api/txn/purchase', postData);
+      const response = await axios.post('${API_BASE_URL}/api/txn/purchase', postData);
 
       if (response.data.message === 'Purchase saved successfully') {
         setOrderConfirmed(true);
@@ -79,18 +80,18 @@ const BuyTokens = () => {
     setLoading(false);
   };
 
-  // if (!userEmail || !userId) {
-  //   return (
-  //     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-teal-800 to-yellow-400 pt-5 sm:pt-16">
-  //       <div className="bg-white p-8 rounded-2xl shadow-xl max-w-md mx-auto text-center">
-  //         Please login again.{' '}
-  //         <Link to="/login" className="text-blue-500 underline">
-  //           Go to Login
-  //         </Link>
-  //       </div>
-  //     </div>
-  //   );
-  // }
+  if (!userEmail || !userId) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-teal-800 to-yellow-400 pt-5 sm:pt-16">
+        <div className="bg-white p-8 rounded-2xl shadow-xl max-w-md mx-auto text-center">
+          Please login again.{' '}
+          <Link to="/login" className="text-blue-500 underline">
+            Go to Login
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   if (orderConfirmed) {
     return (

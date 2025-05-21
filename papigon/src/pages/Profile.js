@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
+import { API_BASE_URL } from '../config';
 import { AuthContext } from '../AuthContext';
 
 const Profile = () => {
@@ -10,7 +11,7 @@ const Profile = () => {
     if (!token) return;
 
     axios
-      .get('http://localhost:5000/api/users/profile', {
+      .get('http://${API_BASE_URL}/api/users/profile', {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => {
