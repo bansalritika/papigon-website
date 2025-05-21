@@ -25,7 +25,7 @@ const Login = () => {
     if (response.data && response.data.token) {
       alert('Login Successful');
       login({ token: response.data.token, userId: response.data.userId });
-      navigate('/profile');
+      navigate('/buy');
     } else {
       alert('Login failed: Invalid response from server');
     }
