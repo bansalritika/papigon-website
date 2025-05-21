@@ -66,7 +66,7 @@ const BuyTokens = () => {
         transactionHash: '', // add actual transaction hash for USDT payments if any
       };
 
-      const response = await axios.post('${API_BASE_URL}/api/txn/purchase', postData);
+      const response = await axios.post(`${API_BASE_URL}/api/txn/purchase`, postData);
 
       if (response.data.message === 'Purchase saved successfully') {
         setOrderConfirmed(true);

@@ -24,7 +24,7 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post('${API_BASE_URL}/api/auth/register', form);
+      const res = await axios.post(`${API_BASE_URL}/api/auth/register`, form);
       alert('Registration Successful');
 
       // Backend se response me user data assume kar rahe hain, example:
