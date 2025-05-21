@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import { API_BASE_URL } from '../config';
-import { useLocation, Link } from 'react-router-dom';
 import Lottie from 'lottie-react';
 import checkAnimation from './assets/check-animation.json'; // Checkmark animation JSON
 
-const tokenPriceUSD = 2; // price per token
-const usdToInrRate = 82; // example INR conversion rate, update as per live rate
+const tokenPriceUSD = 2;
+const usdToInrRate = 82;
 
 const BuyTokens = () => {
-  const location = useLocation();
-  const { userEmail, userId } = location.state || {};
+  const navigate = useNavigate();
+
+  const savedUser = JSON.parse(localStorage.getItem('user'));
+const userEmail = savedUser?.email;
+const userId = savedUser?.userId;
 
   const [coins, setCoins] = useState(1);
   const [totalUSD, setTotalUSD] = useState(tokenPriceUSD);
@@ -22,12 +25,22 @@ const BuyTokens = () => {
   const [orderConfirmed, setOrderConfirmed] = useState(false);
   const [error, setError] = useState('');
 
+  // Update total based on number of coins
   useEffect(() => {
     setTotalUSD(coins * tokenPriceUSD);
     setTotalINR(coins * tokenPriceUSD * usdToInrRate);
   }, [coins]);
 
-  // Connect MetaMask wallet
+  // Redirect to profile after confirmation
+  useEffect(() => {
+    if (orderConfirmed) {
+      const timer = setTimeout(() => {
+        navigate('/profile');
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [orderConfirmed, navigate]);
+
   const connectMetaMask = async () => {
     if (window.ethereum) {
       try {
@@ -43,7 +56,6 @@ const BuyTokens = () => {
     }
   };
 
-  // Confirm payment handler
   const handleConfirmPayment = async () => {
     setError('');
 
@@ -55,15 +67,14 @@ const BuyTokens = () => {
     setLoading(true);
 
     try {
-      // Replace with real MetaMask payment integration if USDT, here just simulation
       const postData = {
         userId,
         email: userEmail,
         coinsPurchased: coins,
-        totalPaid: paymentMethod === 'GPay' ? totalUSD : totalUSD, // backend expects USD
+        totalPaid: totalUSD, // always in USD for backend
         paymentMethod,
         walletAddress: paymentMethod === 'USDT' ? walletAddress : '',
-        transactionHash: '', // add actual transaction hash for USDT payments if any
+        transactionHash: '', // optional
       };
 
       const response = await axios.post(`${API_BASE_URL}/api/txn/purchase`, postData);
@@ -80,28 +91,26 @@ const BuyTokens = () => {
     setLoading(false);
   };
 
-  if (!userEmail || !userId) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-teal-800 to-yellow-400 pt-5 sm:pt-16">
-        <div className="bg-white p-8 rounded-2xl shadow-xl max-w-md mx-auto text-center">
-          Please login again.{' '}
-          <Link to="/login" className="text-blue-500 underline">
-            Go to Login
-          </Link>
-        </div>
+ if (!userEmail || !userId) {
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-teal-800 to-yellow-400 pt-5 sm:pt-16">
+      <div className="bg-white p-8 rounded-2xl shadow-xl max-w-md mx-auto text-center">
+        Please login again.{' '}
+        <Link to="/login" className="text-blue-500 underline">
+          Go to Login
+        </Link>
       </div>
-    );
-  }
+    </div>
+  );
+}
+
 
   if (orderConfirmed) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-green-100 p-6 text-center">
         <Lottie animationData={checkAnimation} loop={false} className="w-40 h-40" />
         <h2 className="text-2xl font-bold text-green-700 mt-4">Order Confirmed!</h2>
-        <p className="text-gray-700 mt-2">Invoice will be sent to your email shortly.</p>
-        <Link to="/" className="mt-6 inline-block text-teal-700 underline">
-          Go to Home
-        </Link>
+        <p className="text-gray-700 mt-2">Redirecting to your profile...</p>
       </div>
     );
   }
@@ -133,8 +142,7 @@ const BuyTokens = () => {
           Total Price:{' '}
           {paymentMethod === 'GPay' ? (
             <>
-              ₹{totalINR.toLocaleString('en-IN', { maximumFractionDigits: 2 })}
-              {' '}
+              ₹{totalINR.toLocaleString('en-IN', { maximumFractionDigits: 2 })}{' '}
               <span className="text-sm text-gray-600">(INR)</span>
             </>
           ) : (
@@ -169,7 +177,7 @@ const BuyTokens = () => {
               className="w-40 mx-auto mb-2"
             />
             <p className="text-sm text-gray-600 text-center">
-              Scan the QR code above or pay using your bank's UPI app to Papigon's GPay.
+              Scan the QR code above and pay to Papigon's GPay.
             </p>
             <p className="text-sm text-gray-600 text-center mt-2">
               After payment, click "Buy" to confirm.
