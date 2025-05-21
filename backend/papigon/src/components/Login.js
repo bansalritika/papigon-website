@@ -17,24 +17,25 @@ const Login = () => {
   };
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
-  const { email, password } = form;  // <-- add this line here
-  try {
-    const response = await axios.post(`${API_BASE_URL}/api/auth/login`, { email, password });
-    console.log('Login response:', response.data);
-    if (response.data && response.data.token) {
-      alert('Login Successful');
-      login({ token: response.data.token, userId: response.data.userId });
-      navigate('/profile');
-    } else {
-      alert('Login failed: Invalid response from server');
-    }
-  } catch (err) {
-    console.error('Login error:', err);
-    alert(err.response?.data?.message || 'Login failed');
+    e.preventDefault();
+    try {
+  const response = await axios.post(`${API_BASE_URL}/api/auth/login`, { email, password });
+  console.log('Login response:', response.data);
+  if (response.data && response.data.token) {
+    alert('Login Successful');
+    login({ token: response.data.token, userId: response.data.userId });
+    navigate('/profile');
+  } else {
+    alert('Login failed: Invalid response from server');
   }
-};
-
+} catch (err) {
+  console.error('Login error:', err);
+  alert(err.response?.data?.message || 'Login failed');
+}
+catch (err) {
+      alert(err.response?.data?.message || 'Login failed');
+    }
+  };
 
   return (
     <div className="min-h-screen flex items-start justify-center bg-gradient-to-br from-teal-800 to-yellow-400 pt-5 sm:pt-16">
