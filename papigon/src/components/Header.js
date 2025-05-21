@@ -85,17 +85,15 @@ const Header = () => {
             className="absolute right-0 mt-2 bg-white text-gray-800 rounded shadow-lg w-44 z-10"
           >
                 <button
-  onMouseDown={(e) => {
-    e.stopPropagation();
-    setUserDropdown(false);
-    navigate('/register');
-  }}
-  className="flex items-center w-full px-4 py-2 hover:bg-teal-100"
->
-  <LogIn size={18} className="mr-2" /> Register
-</button>
-
-
+                  onMouseDown={(e) => {
+                    e.stopPropagation();
+                    setUserDropdown(false);
+                    navigate('/register');
+                                      }}
+                  className="flex items-center w-full px-4 py-2 hover:bg-teal-100"
+                >
+                  <LogIn size={18} className="mr-2" /> Register
+                </button>
 
                 <button
                   onClick={() => alert('Settings')}
@@ -104,7 +102,11 @@ const Header = () => {
                   <Settings size={18} className="mr-2" /> Settings
                 </button>
                 <button
-                  onClick={() => alert('Logout')}
+                  onMouseDown={(e) => {
+                    e.stopPropagation();
+                    setUserDropdown(false);
+                    navigate('/logout');
+                                      }}
                   className="flex items-center w-full text-left px-4 py-2 hover:bg-teal-100"
                 >
                   <LogOut size={18} className="mr-2" /> Logout
