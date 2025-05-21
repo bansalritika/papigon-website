@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Menu, X, UserCircle2, Settings, LogIn, LogOut } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useAuth } from '../hooks/useAuth';
+import { useAuth } from '../AuthContext'; 
 
 const Header = () => {
   const { user, logout } = useAuth();
@@ -132,7 +132,6 @@ const Header = () => {
                     <button
                       onClick={() => {
                         logout();
-                        setUserDropdown(false);
                         navigate('/');
                       }}
                       className="flex items-center w-full px-4 py-2 hover:bg-teal-100"

@@ -1,18 +1,18 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { API_BASE_URL } from '../config';
-import { AuthContext } from '../AuthContext';
+import { useAuth } from '../AuthContext'; // ✅ Correct usage
 
 const Profile = () => {
-  const { token, logout } = useContext(AuthContext);
+  const { user: authUser, logout } = useAuth(); // ✅ Destructure from useAuth()
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    if (!token) return;
+    if (!authUser?.token) return;
 
     axios
       .get(`http://${API_BASE_URL}/api/users/profile`, {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: `Bearer ${authUser.token}` },
       })
       .then((res) => {
         setUser(res.data);
@@ -21,10 +21,9 @@ const Profile = () => {
         alert('Session expired. Please login again.');
         logout();
       });
-  }, [token, logout]);
+  }, [authUser?.token, logout]);
 
-  if (!token) return <div>Please login first.</div>;
-
+  if (!authUser?.token) return <div>Please login first.</div>;
   if (!user) return <div>Loading...</div>;
 
   return (
