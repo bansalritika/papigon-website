@@ -4,9 +4,7 @@ const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
-
 const nodemailer = require('nodemailer');
-
 
 // Register user
 router.post('/register', async (req, res) => {
@@ -38,9 +36,11 @@ router.post('/login', async (req, res) => {
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(400).json({ message: 'Invalid email or password' });
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1d' });
+    // JWT token with user ID payload
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1d' });
 
-    res.json({ token, userId: user._id, name: user.name });
+    // Return token and some user info (for frontend)
+    res.json({ token, userId: user._id, name: user.name, email: user.email, phone: user.phone, gender: user.gender });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -49,7 +49,6 @@ router.post('/login', async (req, res) => {
 router.get('/test', (req, res) => {
   res.json({ message: 'Auth route working!' });
 });
-
 
 router.post('/forgot-password', async (req, res) => {
   const { email } = req.body;
@@ -111,7 +110,5 @@ router.post('/reset-password/:token', async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
-
-
 
 module.exports = router;

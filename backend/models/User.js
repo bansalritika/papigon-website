@@ -8,6 +8,7 @@ const UserSchema = new mongoose.Schema({
   password: { type: String, required: true },
   coinsPurchased: { type: Number, default: 0 },
   totalPaid: { type: Number, default: 0 },
+  createdAt: { type: Date, default: Date.now },
   
   // New fields for password reset
   resetPasswordToken: { type: String },

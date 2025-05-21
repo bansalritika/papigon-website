@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useAuth } from '../hooks/useAuth';
 
 const Login = () => {
   const [form, setForm] = useState({ email: '', password: '' });
   const location = useLocation();
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const { userId, userName, userEmail } = location.state || {};
 
@@ -13,31 +15,32 @@ const Login = () => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
- const handleSubmit = async (e) => {
-  e.preventDefault();
-  try {
-    const { email, password } = form;
-    const response = await axios.post('http://localhost:5000/api/auth/login', { email, password });
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const { email, password } = form;
+      const response = await axios.post('http://localhost:5000/api/auth/login', { email, password });
 
-    console.log('Login response:', response.data);
+      console.log('Login response:', response.data);
 
-    if (response.data && response.data.userId) {
-      alert('Login Successful');
-      navigate('/buy', {
-        state: {
-          userId: response.data.userId,
-          userName: response.data.name,
-          userEmail: email,  // we use email from input as you don’t get it from response
-        },
-      });
-    } else {
-      alert('Login failed: Invalid response from server');
+      if (response.data && response.data.token) {
+        alert('Login Successful');
+
+        // login function me backend se aaya hua user data pass karo
+        login({
+          token: response.data.token,
+          userId: response.data.userId
+        });
+
+        // Navigate user to dashboard or profile page
+        navigate('/profile');
+      } else {
+        alert('Login failed: Invalid response from server');
+      }
+    } catch (err) {
+      alert(err.response?.data?.message || 'Login failed');
     }
-  } catch (err) {
-    alert(err.response?.data?.message || 'Login failed');
-  }
-};
-
+  };
 
   return (
     <div className="min-h-screen flex items-start justify-center bg-gradient-to-br from-teal-800 to-yellow-400 pt-5 sm:pt-16">

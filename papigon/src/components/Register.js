@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../hooks/useAuth';  // <-- yaha import karo
 
 const Register = () => {
   const [form, setForm] = useState({
@@ -12,6 +13,7 @@ const Register = () => {
   });
 
   const navigate = useNavigate();
+  const { login } = useAuth();  // <-- login function destructure karo
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -21,14 +23,18 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:5000/api/auth/register', form);
+      const res = await axios.post('http://localhost:5000/api/auth/register', form);
       alert('Registration Successful');
-      navigate('/login');
+
+      // Backend se response me user data assume kar rahe hain, example:
+      // res.data = { token: 'abc', email: 'user@example.com', id: '123' }
+      login(res.data);  // <-- user data save karna
+
+      navigate('/dashboard');  // Registration ke baad direct dashboard ya jo bhi page
     } catch (err) {
       alert(err.response?.data?.message || 'Registration Failed');
     }
   };
-
   return (
     <div className="min-h-screen items-start flex justify-center bg-gradient-to-br from-teal-800 to-yellow-400 px-4 pt-5 sm:pt-16">
       <div className="bg-white p-6 sm:p-8 rounded-2xl shadow-xl w-full max-w-sm sm:max-w-md">
