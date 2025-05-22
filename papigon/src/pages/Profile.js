@@ -11,7 +11,7 @@ const Profile = () => {
     if (!authUser?.token) return;
 
     axios
-      .get(`http://${API_BASE_URL}/api/users/profile`, {
+      .get(`${API_BASE_URL}/api/users/profile`, {
         headers: { Authorization: `Bearer ${authUser.token}` },
       })
       .then((res) => {
