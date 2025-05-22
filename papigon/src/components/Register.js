@@ -31,7 +31,7 @@ const Register = () => {
       // res.data = { token: 'abc', email: 'user@example.com', id: '123' }
       login(res.data);  // <-- user data save karna
 
-      navigate('/dashboard');  // Registration ke baad direct dashboard ya jo bhi page
+      navigate('/login');  // Registration ke baad direct dashboard ya jo bhi page
     } catch (err) {
       alert(err.response?.data?.message || 'Registration Failed');
     }
