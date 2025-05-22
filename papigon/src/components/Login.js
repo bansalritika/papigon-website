@@ -13,37 +13,36 @@ const Login = () => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const { email, password } = form;
+ const handleSubmit = async (e) => {
+  e.preventDefault();
+  const { email, password } = form;
 
-    try {
-      const response = await axios.post(`${API_BASE_URL}/api/auth/login`, { email, password });
-      console.log('Login response:', response.data);
+  try {
+    const response = await axios.post(`${API_BASE_URL}/api/auth/login`, { email, password });
+    console.log('Login response:', response.data);
 
-      if (response.data && response.data.token) {
-        alert('Login Successful');
+    if (response.data && response.data.token) {
+      alert('Login Successful');
 
-        // Save to context
-        login({
-          token: response.data.token,
-          email: response.data.user.email,
-          id: response.data.user._id,
-        });
+      // Save to context
+      login({
+        token: response.data.token,
+        email: response.data.email,
+        id: response.data.userId,
+      });
 
-        // Optional: Also store in localStorage for persistence
-        localStorage.setItem('authToken', response.data.token);
-localStorage.setItem('userEmail', response.data.email);
-localStorage.setItem('userId', response.data.userId);
+      // Optional: Also store in localStorage for persistence
+      localStorage.setItem('authToken', response.data.token);
+      localStorage.setItem('userEmail', response.data.email);
+      localStorage.setItem('userId', response.data.userId);
 
-
-        navigate('/buy');
-      }
-    } catch (err) {
-      console.error(err);
-      alert('Login failed');
+      navigate('/buy');
     }
-  };
+  } catch (err) {
+    console.error(err);
+    alert('Login failed');
+  }
+};
 
   return (
     <div className="min-h-screen flex items-start justify-center bg-gradient-to-br from-teal-800 to-yellow-400 pt-5 sm:pt-16">
