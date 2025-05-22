@@ -8,11 +8,24 @@ const cors = require('cors');
 
 const app = express();
 app.use(express.json());
+const allowedOrigins = [
+  'https://papigon-website.vercel.app',
+  'https://papigon-website-git-main-ritikas-projects-e21caa4f.vercel.app'
+];
 app.use(cors({
-  origin: 'https://papigon-website.vercel.app', // your frontend URL
-  methods: ['GET', 'POST', 'PUT', 'DELETE'], // allowed HTTP methods
-  credentials: true, // if your frontend uses credentials like cookies or auth headers
+  origin: function(origin, callback) {
+    console.log('Request origin:', origin);
+    if (!origin) return callback(null, true); // Postman/curl ke liye allow karna
+
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true // Agar cookies/auth headers chahiye toh
 }));
+
 
 // API Routes
 app.use('/api/auth', authRoutes);

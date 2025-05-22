@@ -11,6 +11,7 @@ import BuyTokens from './components/BuyTokens';
 import Logout from './components/Logout';
 import Profile from './pages/Profile';
 import { AuthProvider } from './AuthContext';
+import About from './pages/About';
 
 function App() {
   return (
@@ -19,7 +20,7 @@ function App() {
         <Header />
         <div className="mt-4">
           <Routes>
-            {/* <Route path="/" element={<About />} /> */}
+            <Route path="/" element={<About />} />
             <Route path="/register" element={<Register />} />
             <Route path="/reset-password/:token" element={<ResetPassword />} />
             <Route path="/login" element={<Login />} />
