@@ -8,16 +8,17 @@ const userRoutes = require('./routes/user');
 
 const app = express();
 
-// ✅ Move this block to the top (before any middleware/routes)
 const allowedOrigins = [
   'https://papigon-website.vercel.app',
   'https://papigon-website-git-main-ritikas-projects-e21caa4f.vercel.app'
 ];
 
+const vercelPreviewPattern = /^https:\/\/papigon-website-[a-z0-9\-]+-ritikas-projects-e21caa4f\.vercel\.app$/;
+
 app.use(cors({
   origin: function(origin, callback) {
     console.log('Request origin:', origin);
-    if (!origin || allowedOrigins.includes(origin)) {
+    if (!origin || allowedOrigins.includes(origin) || vercelPreviewPattern.test(origin)) {
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));
@@ -25,6 +26,7 @@ app.use(cors({
   },
   credentials: true
 }));
+
 
 // ✅ Middleware after CORS
 app.use(express.json());
