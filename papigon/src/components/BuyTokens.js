@@ -12,8 +12,9 @@ const BuyTokens = () => {
   const navigate = useNavigate();
 
   const savedUser = JSON.parse(localStorage.getItem('user'));
-const userEmail = savedUser?.email;
-const userId = savedUser?.userId;
+  const userEmail = savedUser?.email;
+  const userId = savedUser?.userId;
+  const token = savedUser?.token;
 
   const [coins, setCoins] = useState(1);
   const [totalUSD, setTotalUSD] = useState(tokenPriceUSD);
@@ -31,13 +32,18 @@ const userId = savedUser?.userId;
     setTotalINR(coins * tokenPriceUSD * usdToInrRate);
   }, [coins]);
 
-  // Redirect to profile after confirmation
+  // Redirect to profile after order confirmation
   useEffect(() => {
     if (orderConfirmed) {
-      const timer = setTimeout(() => {
-        navigate('/profile');
-      }, 3000);
-      return () => clearTimeout(timer);
+      const storedUser = JSON.parse(localStorage.getItem('user'));
+      if (!storedUser?.token) {
+        navigate('/login');
+      } else {
+        const timer = setTimeout(() => {
+          navigate('/profile');
+        }, 3000);
+        return () => clearTimeout(timer);
+      }
     }
   }, [orderConfirmed, navigate]);
 
@@ -71,10 +77,10 @@ const userId = savedUser?.userId;
         userId,
         email: userEmail,
         coinsPurchased: coins,
-        totalPaid: totalUSD, // always in USD for backend
+        totalPaid: totalUSD,
         paymentMethod,
         walletAddress: paymentMethod === 'USDT' ? walletAddress : '',
-        transactionHash: '', // optional
+        transactionHash: '',
       };
 
       const response = await axios.post(`${API_BASE_URL}/api/txn/purchase`, postData);
@@ -91,19 +97,18 @@ const userId = savedUser?.userId;
     setLoading(false);
   };
 
- if (!userEmail || !userId) {
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-teal-800 to-yellow-400 pt-5 sm:pt-16">
-      <div className="bg-white p-8 rounded-2xl shadow-xl max-w-md mx-auto text-center">
-        Please login again.{' '}
-        <Link to="/login" className="text-blue-500 underline">
-          Go to Login
-        </Link>
+  if (!userEmail || !userId || !token) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-teal-800 to-yellow-400 pt-5 sm:pt-16">
+        <div className="bg-white p-8 rounded-2xl shadow-xl max-w-md mx-auto text-center">
+          Session expired. Please{' '}
+          <Link to="/login" className="text-blue-500 underline">
+            login again
+          </Link>.
+        </div>
       </div>
-    </div>
-  );
-}
-
+    );
+  }
 
   if (orderConfirmed) {
     return (
