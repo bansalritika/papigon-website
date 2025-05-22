@@ -32,11 +32,10 @@ const Login = () => {
         });
 
         // Optional: Also store in localStorage for persistence
-        localStorage.setItem('user', JSON.stringify({
-          token: response.data.token,
-          email: response.data.user.email,
-          userId: response.data.user._id,
-        }));
+        localStorage.setItem('authToken', response.data.token);
+localStorage.setItem('userEmail', response.data.email);
+localStorage.setItem('userId', response.data.userId);
+
 
         navigate('/buy');
       }

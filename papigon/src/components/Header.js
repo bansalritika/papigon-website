@@ -13,22 +13,11 @@ const Header = () => {
   const dropdownRef = useRef(null);
 
   useEffect(() => {
-    function handleClickOutside(event) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setUserDropdown(false);
-      }
-    }
+  setUserDropdown(false);
+}, [user]);
 
-    if (userDropdown) {
-      document.addEventListener('mousedown', handleClickOutside);
-    } else {
-      document.removeEventListener('mousedown', handleClickOutside);
-    }
 
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [userDropdown]);
+console.log('Header user:', user);
 
   const navLinks = [
     { href: '/about', label: 'About Us' },
@@ -40,8 +29,8 @@ const Header = () => {
   ];
 
   const handleUserClick = () => {
-    setUserDropdown(!userDropdown);
-  };
+  setUserDropdown(prev => !prev);
+};
 
   const handleLinkClick = (href) => {
     navigate(href);
