@@ -4,6 +4,7 @@ import axios from 'axios';
 import { API_BASE_URL } from '../config';
 import Lottie from 'lottie-react';
 import checkAnimation from './assets/check-animation.json'; // Checkmark animation JSON
+import { useAuth } from '../AuthContext';
 
 const tokenPriceUSD = 2;
 const usdToInrRate = 82;
@@ -11,10 +12,10 @@ const usdToInrRate = 82;
 const BuyTokens = () => {
   const navigate = useNavigate();
 
-  const savedUser = JSON.parse(localStorage.getItem('user'));
-  const userEmail = savedUser?.email;
-  const userId = savedUser?.userId;
-  const token = savedUser?.token;
+  const { user } = useAuth();
+const userEmail = user?.email;
+  const userId = user?.id;
+const token = user?.token;
 
   const [coins, setCoins] = useState(1);
   const [totalUSD, setTotalUSD] = useState(tokenPriceUSD);

@@ -16,31 +16,33 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const { email, password } = form;
+
     try {
       const response = await axios.post(`${API_BASE_URL}/api/auth/login`, { email, password });
       console.log('Login response:', response.data);
+
       if (response.data && response.data.token) {
         alert('Login Successful');
 
-        // Store in localStorage
-        localStorage.setItem('user', JSON.stringify({
-          email: response.data.email,
-          userId: response.data.userId,
-        }));
-
+        // Save to context
         login({
           token: response.data.token,
-          id: response.data.userId,
-          email: response.data.email,
+          email: response.data.user.email,
+          id: response.data.user._id,
         });
 
+        // Optional: Also store in localStorage for persistence
+        localStorage.setItem('user', JSON.stringify({
+          token: response.data.token,
+          email: response.data.user.email,
+          userId: response.data.user._id,
+        }));
+
         navigate('/buy');
-      } else {
-        alert('Login failed: Invalid response from server');
       }
     } catch (err) {
-      console.error('Login error:', err);
-      alert(err.response?.data?.message || 'Login failed');
+      console.error(err);
+      alert('Login failed');
     }
   };
 
