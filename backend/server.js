@@ -8,24 +8,11 @@ const cors = require('cors');
 
 const app = express();
 app.use(express.json());
-const allowedOrigins = [
-  'https://papigon-website.vercel.app',
-  'https://papigon-website-etl6gz60t-ritikas-projects-e21caa4f.vercel.app',
-  'http://localhost:3000'
-];
-
 app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS: ' + origin));
-    }
-  },
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  credentials: true
+  origin: 'https://papigon-website.vercel.app', // your frontend URL
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], // allowed HTTP methods
+  credentials: true, // if your frontend uses credentials like cookies or auth headers
 }));
-
 
 // API Routes
 app.use('/api/auth', authRoutes);
