@@ -74,17 +74,36 @@ const Login = () => {
             className="w-full px-4 py-2 border rounded-lg"
           />
           <button
-            type="submit"
-            className="w-full bg-teal-800 text-white py-2 rounded-lg hover:bg-teal-700 transition" disabled={loading}
-          > {loading ? (
-    <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
+  type="submit"
+  disabled={loading}
+  className="w-full bg-teal-800 text-white py-2 rounded-lg hover:bg-teal-700 transition flex justify-center items-center"
+>
+  {loading ? (
+    <svg
+      className="animate-spin h-5 w-5 text-white"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+    >
+      <circle
+        className="opacity-25"
+        cx="12"
+        cy="12"
+        r="10"
+        stroke="currentColor"
+        strokeWidth="4"
+      />
+      <path
+        className="opacity-75"
+        fill="currentColor"
+        d="M4 12a8 8 0 018-8v8H4z"
+      />
     </svg>
   ) : (
-    "Login"
+    'Login'
   )}
-          </button>
+</button>
+
         </form>
         <div className="text-sm text-center mt-4">
           <p>
