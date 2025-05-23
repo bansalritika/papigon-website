@@ -11,6 +11,7 @@ const ResetPassword = () => {
  const [loading, setLoading] = useState(false);
   const handleReset = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       await axios.post(`${API_BASE_URL}/api/auth/reset-password/${token}`, { password });
       alert('Password reset successfully');

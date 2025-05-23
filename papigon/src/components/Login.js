@@ -16,6 +16,7 @@ const Login = () => {
 
  const handleSubmit = async (e) => {
   e.preventDefault();
+  setLoading(true);
   const { email, password } = form;
 
   try {
@@ -53,17 +54,21 @@ const Login = () => {
         <h2 className="text-2xl font-bold text-teal-800 mb-6">Login</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <input
+          autoComplete="email"
             type="email"
             name="email"
             placeholder="Email"
+            value={form.email}
             onChange={handleChange}
             required
             className="w-full px-4 py-2 border rounded-lg"
           />
           <input
+          autoComplete="current-password"
             type="password"
             name="password"
             placeholder="Password"
+            value={form.password} 
             onChange={handleChange}
             required
             className="w-full px-4 py-2 border rounded-lg"
