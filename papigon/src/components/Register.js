@@ -15,6 +15,7 @@ const Register = () => {
 
   const navigate = useNavigate();
   const { login } = useAuth();  // <-- login function destructure karo
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -34,7 +35,9 @@ const Register = () => {
       navigate('/login');  // Registration ke baad direct dashboard ya jo bhi page
     } catch (err) {
       alert(err.response?.data?.message || 'Registration Failed');
-    }
+    } finally {
+    setLoading(false);
+  }
   };
   return (
     <div className="min-h-screen items-start flex justify-center bg-gradient-to-br from-teal-800 to-yellow-400 px-4 pt-5 sm:pt-16">
@@ -108,9 +111,15 @@ const Register = () => {
 
           <button
             type="submit"
-            className="w-full bg-teal-800 text-white py-2 rounded-lg hover:bg-teal-700 transition text-sm"
-          >
-            Register
+            className="w-full bg-teal-800 text-white py-2 rounded-lg hover:bg-teal-700 transition text-sm"  disabled={loading}
+          >{loading ? (
+    <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
+    </svg>
+  ) : (
+    "Register"
+  )}
           </button>
         </form>
 
